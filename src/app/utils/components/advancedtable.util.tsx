@@ -78,13 +78,13 @@ const AdvancedTable: React.FC<TableProps> = ({ data }) => {
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300">
-                <thead>
+                {/* <thead>
                     <tr>
                         <th className="px-4 py-2 text-left">Section</th>
                         <th className="px-4 py-2 text-left">07 June 2024</th>
                         <th className="px-4 py-2 text-left">08 June 2023</th>
                     </tr>
-                </thead>
+                </thead> */}
                 <tbody>
                     {renderRows(report.Rows)}
                 </tbody>
