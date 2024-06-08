@@ -5,7 +5,7 @@ class RestService {
 
     constructor() {
         this.axios = axios.create({
-            baseURL: 'http://localhost:3001',
+            baseURL: process.env.API_BASE_URL,
         });
     }
 

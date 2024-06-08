@@ -1,16 +1,42 @@
-import { GetServerSideProps } from 'next';
+"use client"
+import React, { useState, useEffect } from 'react';
 import AdvancedTable from '../utils/components/advancedtable.util';
-import RestService from '../lib/services/rest';
 
-const restService = new RestService();
 
-type HomePageProps = {
-    data: any;
-    error?: string | null;
-};
+const AccountsPage: React.FC = () => {
+    const [data, setData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
-const HomePage: React.FC<HomePageProps> = async () => {
-    const { data, error } = await fetchBalanceSheetData();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("/api/v1/Reports/BalanceSheet");
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.json();
+                setData(result.data); // Adjust this based on your API response structure
+                setError(null);
+            } catch (err) {
+                setError('Failed to fetch data');
+                setData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="text-2xl">Loading...</div>
+            </div>
+        );
+    }
+
     if (error) {
         return (
             <div className="container mx-auto p-4">
@@ -28,13 +54,4 @@ const HomePage: React.FC<HomePageProps> = async () => {
     );
 };
 
-async function fetchBalanceSheetData() {
-    try {
-        const response = await restService.GET<any>('/api.xro/2.0/Reports/BalanceSheet');
-        return { data: response.data, error: null };
-    } catch (error) {
-        return { data: null, error: 'Failed to fetch data' };
-    }
-}
-
-export default HomePage;
+export default AccountsPage;
